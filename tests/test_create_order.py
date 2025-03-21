@@ -6,8 +6,8 @@ import pytest
 from src.crud.methods import Methods
 from src.constants import ORDERS
 
-class TestCreateOrder:
 
+class TestCreateOrder:
 
     @allure.title("можно указать один из цветов — BLACK или GREY")
     @allure.title("можно указать оба цвета")
@@ -33,4 +33,3 @@ class TestCreateOrder:
             response = method.post(expected_status_code=201, data=json.dumps(order_data))
         with allure.step('Проверяем ответ'):
             assert response.json()['track']
-

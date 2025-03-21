@@ -13,11 +13,11 @@ class Assertion:
         assert actual_status_code == expected_status_code, f"Фактический статус код: {actual_status_code}"
 
 
-class Methods(Assertion):
+class Methods:
 
     def __init__(self, url):
         self.url = url
-        super().__init__()
+        self.assertion = Assertion()
 
     @staticmethod
     def attach_method(response):
@@ -28,21 +28,22 @@ class Methods(Assertion):
         response = requests.get(url=self.url, params=params)
         self.attach_method(response)
         if expected_status_code:
-            self.assert_status_code(response.status_code, expected_status_code)
+            self.assertion.assert_status_code(response.status_code, expected_status_code)
         elif expected_body:
-            self.assert_response_body(response.json(), expected_body)
+            self.assertion.assert_response_body(response.json(), expected_body)
         return response
 
     def post(self, expected_status_code='', data='', expected_body=''):
         response = requests.post(url=self.url, data=data)
         self.attach_method(response)
         if expected_status_code:
-            self.assert_status_code(response.status_code, expected_status_code)
+            self.assertion.assert_status_code(response.status_code, expected_status_code)
         elif expected_body:
-            self.assert_response_body(response.json(), expected_body)
+            self.assertion.assert_response_body(response.json(), expected_body)
         return response
 
-    def delete(self, expected_status_code, params=''):
+    def delete(self, expected_status_code='', params=''):
         response = requests.delete(url=self.url + params)
         self.attach_method(response)
-        self.assert_status_code(response.status_code, expected_status_code)
+        if expected_status_code:
+            self.assertion.assert_status_code(response.status_code, expected_status_code)
